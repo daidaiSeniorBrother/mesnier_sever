@@ -2,6 +2,7 @@ package utils
 
 import (
 	"github.com/satori/go.uuid"
+	"time"
 )
 
 /**
@@ -13,6 +14,10 @@ Version 5, 基于 SHA-1 hashing (RFC 4122)
 */
 func UUID() string {
 	return uuid.NewV4().String()
+}
+
+func TimeNowStr() string {
+	return time.Now().Format("2006-01-02 15:04:05")
 }
 func IsContain(items []string, item string) bool {
 	for _, eachItem := range items {

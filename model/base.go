@@ -2,7 +2,7 @@ package model
 
 import (
 	"gorm.io/gorm"
-	"time"
+	"mesnier/utils"
 )
 
 type PageResponse struct {
@@ -18,13 +18,13 @@ type Base struct {
 
 func (b *Base) BeforeCreate(*gorm.DB) error {
 	if len(b.CreateTime) == 0 {
-		b.CreateTime = time.Now().Format("2006-01-02 15:04:05")
-		b.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
+		b.CreateTime = utils.TimeNowStr()
+		b.UpdateTime = utils.TimeNowStr()
 	}
 	return nil
 }
 
 func (b *Base) BeforeUpdate(*gorm.DB) error {
-	b.UpdateTime = time.Now().Format("2006-01-02 15:04:05")
+	b.UpdateTime = utils.TimeNowStr()
 	return nil
 }

@@ -3,6 +3,7 @@ module mesnier
 go 1.15
 
 require (
+	github.com/PuerkitoBio/goquery v1.6.1
 	github.com/fsnotify/fsnotify v1.4.9
 	github.com/gin-gonic/gin v1.6.3
 	github.com/satori/go.uuid v1.2.0

@@ -8,6 +8,7 @@ import (
 func main() {
 	// 初始化各项配置
 	confs.SetUp()
+	confs.CtripSetUp()
 	//初始化路由
 	r := routers.InitRouter()
 	_ = r.Run("0.0.0.0:8765")

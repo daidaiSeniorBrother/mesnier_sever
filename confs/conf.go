@@ -7,6 +7,10 @@ import (
 	"gorm.io/driver/mysql"
 	"gorm.io/gorm"
 	"gorm.io/gorm/logger"
+	"os"
+	"os/exec"
+	"path/filepath"
+	"strings"
 	"time"
 )
 
@@ -34,7 +38,14 @@ func initConfig() error {
 	VIPER.SetConfigType("yaml")       // 设置配置文件格式为YAML
 	if err := VIPER.ReadInConfig(); err != nil {
 		fmt.Print(err)
-		return err
+		file, _ := exec.LookPath(os.Args[0])
+		path, _ := filepath.Abs(file)
+		index := strings.LastIndex(path, string(os.PathSeparator))
+		path = path[:index]
+		VIPER.SetConfigFile(path + "/app.yaml")
+		if err := VIPER.ReadInConfig(); err != nil {
+			return err
+		}
 	}
 	VIPER.WatchConfig()
 	VIPER.OnConfigChange(func(in fsnotify.Event) {

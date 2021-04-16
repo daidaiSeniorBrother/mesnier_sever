@@ -1,4 +1,4 @@
-package model
+package dto
 
 type Attraction struct {
 	Result         int              `json:"result"`

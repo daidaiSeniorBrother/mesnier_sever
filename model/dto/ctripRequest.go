@@ -1,4 +1,4 @@
-package model
+package dto
 
 type Extension struct {
 	Name  string `json:"name"`

@@ -7,6 +7,7 @@ import (
 	"github.com/mitchellh/mapstructure"
 	"io/ioutil"
 	"mesnier/model"
+	"mesnier/model/dto"
 	"mesnier/utils"
 	"strings"
 )
@@ -88,7 +89,7 @@ func GetAttractionListFunc(districtId int, ctripCityId int) (ctripAttractionList
 	return
 }
 
-func createCtripAttraction(a model.Attraction, districtId int, ctripCityId int) (ctripAttractionList []model.CtripAttraction) {
+func createCtripAttraction(a dto.Attraction, districtId int, ctripCityId int) (ctripAttractionList []model.CtripAttraction) {
 	details := a.AttractionList
 	for _, detail := range details {
 		var ca = model.CtripAttraction{
@@ -109,9 +110,9 @@ func createCtripAttraction(a model.Attraction, districtId int, ctripCityId int) 
 	return
 }
 
-func getAttractionListSubFunc(districtId int, index int) (a model.Attraction) {
+func getAttractionListSubFunc(districtId int, index int) (a dto.Attraction) {
 	var (
-		ctripCityAttraction = model.CtripCityAttraction{
+		ctripCityAttraction = dto.CtripCityAttraction{
 			Index:             index,
 			Count:             20,
 			SortType:          1,
@@ -120,11 +121,11 @@ func getAttractionListSubFunc(districtId int, index int) (a model.Attraction) {
 			Scene:             "DISTRICT",
 			PageId:            "sight_list",
 			TraceId:           "ea006adc-ce22-7ec6-92fd-ebb171153340",
-			Extension:         []model.Extension{{Name: "osVersion", Value: "11.2.2"}, {Name: "deviceType", Value: "ios"}},
-			Filter:            model.Filter{FilterItems: []model.FilterItems{}},
+			Extension:         []dto.Extension{{Name: "osVersion", Value: "11.2.2"}, {Name: "deviceType", Value: "ios"}},
+			Filter:            dto.Filter{FilterItems: []dto.FilterItems{}},
 			CrnVersion:        "2020-09-01 22:00:45",
 			IsInitialState:    true,
-			Head: model.Head{
+			Head: dto.Head{
 				Cid:       "09031066113126275485",
 				Ctok:      "",
 				Cver:      "1.0",
@@ -133,7 +134,7 @@ func getAttractionListSubFunc(districtId int, index int) (a model.Attraction) {
 				Syscode:   "09",
 				Auth:      "",
 				Xsid:      "",
-				Extension: []model.Extension{},
+				Extension: []dto.Extension{},
 			},
 		}
 	)
@@ -145,6 +146,42 @@ func getAttractionListSubFunc(districtId int, index int) (a model.Attraction) {
 	return
 }
 
-func GetPoiMoreDetailFunc() {
-
+/**
+{
+    "poiId": 23078384,
+    "scene": "basic",
+    "head": {
+        "cid": "09031066113126275485",
+        "ctok": "",
+        "cver": "1.0",
+        "lang": "01",
+        "sid": "8888",
+        "syscode": "09",
+        "auth": "",
+        "xsid": "",
+        "extension": []
+    }
+}
+*/
+func GetPoiMoreDetailFunc(poiId int) (m map[string]interface{}) {
+	var (
+		ctripCityTemplate = dto.CtripCityTemplate{
+			PoiId: poiId,
+			Scene: "basic",
+			Head: dto.Head{
+				Cid:       "09031066113126275485",
+				Ctok:      "",
+				Cver:      "1.0",
+				Lang:      "01",
+				Sid:       "8888",
+				Syscode:   "09",
+				Auth:      "",
+				Xsid:      "",
+				Extension: []dto.Extension{},
+			},
+		}
+	)
+	jsons, _ := json.Marshal(ctripCityTemplate)
+	m = utils.SamplePost(GetPoimoreDetail, jsons)
+	return
 }

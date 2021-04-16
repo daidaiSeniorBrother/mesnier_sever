@@ -22,6 +22,19 @@ func InitRouter() *gin.Engine {
 				apis.UserList(c)
 			})
 		}
+		tourism := api.Group("/tourism")
+		{
+			tourism.GET("/city/list", func(context *gin.Context) {
+				apis.GetCityList(context)
+			})
+			tourism.POST("/attraction/list", func(context *gin.Context) {
+				apis.GetCityAttractionList(context)
+			})
+			tourism.GET("/poi/details", func(context *gin.Context) {
+				apis.GetPoiDetails(context)
+			})
+
+		}
 	}
 	return r
 }

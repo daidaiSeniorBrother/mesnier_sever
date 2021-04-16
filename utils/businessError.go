@@ -10,5 +10,9 @@ func NewBusinessError(code int, err string) error {
 }
 
 func (e *BusinessError) Error() string {
-	return e.Err
+	var errorMeg string
+	if e != nil {
+		errorMeg = e.Err
+	}
+	return errorMeg
 }

@@ -5,8 +5,14 @@ import (
 	"mesnier/utils"
 )
 
+type PageRequest struct {
+	PageSize   int         `json:"page_size"`
+	PageNum    int         `json:"page_num"`
+	QueryModel interface{} `json:"query_model"`
+}
+
 type PageResponse struct {
-	ObjectData interface{} `json:"objectData"`
+	ObjectData interface{} `json:"object_data"`
 	Total      int64       `json:"total"`
 }
 

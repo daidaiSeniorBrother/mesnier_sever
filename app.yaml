@@ -6,3 +6,5 @@ mysql:
   port: "3306"
   min: 10
   max: 100
+query:
+  ctrip: false

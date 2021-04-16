@@ -4,9 +4,17 @@ import (
 	"fmt"
 	"mesnier/model"
 	"mesnier/query"
+	"strconv"
 )
 
 func CtripSetUp() {
+	if VIPER.GetBool("query.ctrip") {
+		initCrtipData()
+		InitCrtipAttractionData()
+	}
+}
+
+func initCrtipData() {
 	var (
 		cc           []model.CtripCity
 		ccCreateList []model.CtripCity
@@ -32,10 +40,25 @@ func CtripSetUp() {
 			ccCreateList = append(ccCreateList, city)
 		}
 	}
-	if err = DB.Create(&ccCreateList).Error; err != nil {
-		fmt.Print(err)
+	if len(ccCreateList) > 0 {
+		if err = DB.Create(&ccCreateList).Error; err != nil {
+			fmt.Print(err)
+		}
 	}
 	for _, city := range ccUpdateList {
 		DB.Updates(city)
 	}
+}
+
+func InitCrtipAttractionData() {
+	var ctripCity []model.CtripCity
+	DB.Find(&ctripCity)
+	for _, city := range ctripCity {
+		int, _ := strconv.Atoi(city.CtripCityQuery)
+		ctripAttractionList := query.GetAttractionListFunc(int, city.CtripCityId)
+		if err := DB.Create(&ctripAttractionList).Error; err != nil {
+			fmt.Print(err)
+		}
+	}
+
 }

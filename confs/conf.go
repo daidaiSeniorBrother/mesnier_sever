@@ -12,6 +12,7 @@ import (
 
 //初始化全局DB
 var DB *gorm.DB
+var VIPER *viper.Viper
 
 func SetUp() {
 	// 初始化配置
@@ -28,24 +29,25 @@ func SetUp() {
 }
 
 func initConfig() error {
-	viper.SetConfigFile("./app.yaml") // 如果指定了配置文件，则解析指定的配置文件
-	viper.SetConfigType("yaml")       // 设置配置文件格式为YAML
-	if err := viper.ReadInConfig(); err != nil {
+	VIPER = viper.New()
+	VIPER.SetConfigFile("./app.yaml") // 如果指定了配置文件，则解析指定的配置文件
+	VIPER.SetConfigType("yaml")       // 设置配置文件格式为YAML
+	if err := VIPER.ReadInConfig(); err != nil {
 		fmt.Print(err)
 		return err
 	}
-	viper.WatchConfig()
-	viper.OnConfigChange(func(in fsnotify.Event) {
+	VIPER.WatchConfig()
+	VIPER.OnConfigChange(func(in fsnotify.Event) {
 		fmt.Println("配置文件修改:", in.Name)
 	})
 	return nil
 }
 
 func initDb() (err error) {
-	user := viper.GetString("mysql.user")
-	password := viper.GetString("mysql.password")
-	dbName := viper.GetString("mysql.db")
-	local := viper.GetString("mysql.host") + ":" + viper.GetString("mysql.port")
+	user := VIPER.GetString("mysql.user")
+	password := VIPER.GetString("mysql.password")
+	dbName := VIPER.GetString("mysql.db")
+	local := VIPER.GetString("mysql.host") + ":" + VIPER.GetString("mysql.port")
 	dsn := user + ":" + password + "@tcp(" + local + ")/" + dbName + "?charset=utf8mb4&parseTime=True&loc=Local"
 	DB, err = gorm.Open(mysql.Open(dsn), &gorm.Config{
 		Logger: logger.Default.LogMode(logger.Info),
@@ -54,8 +56,8 @@ func initDb() (err error) {
 		return err
 	}
 	sqlDB, _ := DB.DB()
-	maxIdleConn := viper.GetInt("mysql.db")
-	maxOpenConn := viper.GetInt("mysql.db")
+	maxIdleConn := VIPER.GetInt("mysql.db")
+	maxOpenConn := VIPER.GetInt("mysql.db")
 	if maxIdleConn <= 0 {
 		maxIdleConn = 100
 	}

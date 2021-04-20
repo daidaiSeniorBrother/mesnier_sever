@@ -54,11 +54,10 @@ func InitCrtipAttractionData() {
 	var ctripCity []model.CtripCity
 	DB.Find(&ctripCity)
 	for _, city := range ctripCity {
-		int, _ := strconv.Atoi(city.CtripCityQuery)
-		ctripAttractionList := query.GetAttractionListFunc(int, city.CtripCityId)
+		i, _ := strconv.Atoi(city.CtripCityQuery)
+		ctripAttractionList := query.GetAttractionListFunc(i, city.CtripCityId)
 		if err := DB.Create(&ctripAttractionList).Error; err != nil {
 			fmt.Print(err)
 		}
 	}
-
 }

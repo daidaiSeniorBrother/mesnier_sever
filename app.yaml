@@ -4,6 +4,7 @@ mysql:
   db: mesnier
   host: "127.0.0.1"
   port: "3306"
+  log: true
   min: 10
   max: 100
 query:
